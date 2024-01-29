@@ -7,6 +7,7 @@
 - 응답 속도가 빠르다.
 - 배우기 쉽고 간편하게 개발이 가능하다.
 - 데이터 중복이 발생할 수 있지만, 접근성과 가시성이 좋다.
+
 즉, MongoDB는 유연하고 확장성 높은 Opensource Document 지향 DB이다.
 
 ## SQL vs NoSQL
@@ -25,15 +26,15 @@
     - **서비스 특성에 맞게 사용하는 것이 맞음**
 ```json
 {
-    _id: 1,
-    first_name: "Spring",
-    last_name: "Melon",
-    zipcode: 123456,
-    phone: "123-456-789",
-    sns: [
-        { type: "email", id: "sirng123@lake.co" },
-        { type: "instagram", id: "in_spring" },
-        { type: "twitter", id: "tw_spring" }
+    "_id": 1,
+    "first_name": "Spring",
+    "last_name": "Melon",
+    "zipcode": 123456,
+    "phone": "123-456-789",
+    "sns": [
+        { "type": "email", "id": "sirng123@lake.co" },
+        { "type": "instagram", "id": "in_spring" },
+        { "type": "twitter", "id": "tw_spring" }
     ]
 }
 ```
