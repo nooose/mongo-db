@@ -80,3 +80,29 @@ Database &rarr; Collection &rarr; Document &rarr; Field 순으로 구조가 형�
 - 모든 Document에는 `_id` 필드가 있고, 없이 생성하면 `ObjectId` 타입의 고유한 값을 저장한다.
 - 생성 시, 상위 구조인 Database나 Collection이 없다면 먼저 생성하고 Document를 생성한다.
 - Document의 최대 크기는 16MB으로 고정되어 있다.
+
+## 배포 형태
+### Standalone
+- 테스트 / 개발 사용
+### Replica Set
+- HA 보장
+- Write 요청은 Primary
+  - Primary 는 오직 1개
+  - Primary 는 Secondary 로 복제
+- Read 요청은 Secondary
+- Primary 의 Heartbeat 응답이 없다면 Secondary 중 하나가 Primary 로 승격된다.
+  - 선출을 통해 과반수 투표를 얻어 Secondary 중 하나가 선정됨
+- Oplog Collection 을 통해 데이터가 복제된다.
+### Sharded Cluster Set
+- HA 보장
+- Shard 별 데이터 분산
+  - 각 Shard 안에는 Replica Set 으로 구성되어 있다.
+  - Collection 단위로 생성 가능
+    - 특정 Collection 은 Shard 를 적용하지 않게도 가능
+  - 꼭 Router 를 통해 접근
+  - Shard Key 를 선정해야하고, 해당 필드에는 Index 가 만들어져 있어야 한다.
+- Ranged Sharding, **Hashed Sharding**, Zone Sharding 지원 
+## Storage Engine
+- 3.2 부터 WiredTiger 가 적용되면서 성능이 많이 개선
+  - Data Compression 지원
+  - Database/Collection 레벨의 Lock &rarr; Document 레벨의 Lock
