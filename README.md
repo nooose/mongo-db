@@ -1,4 +1,4 @@
-# MongoDB with Atlas
+# MongoDB 6.0 with Atlas
 ## MongoDB를 선택하는 이유
 - Schema가 자유롭다.
 - HA와 Scale-Out Solution을 자체적으로 지원해서 확장이 쉽다.
@@ -106,3 +106,84 @@ Database &rarr; Collection &rarr; Document &rarr; Field 순으로 구조가 형�
 - 3.2 부터 WiredTiger 가 적용되면서 성능이 많이 개선
   - Data Compression 지원
   - Database/Collection 레벨의 Lock &rarr; Document 레벨의 Lock
+
+## Atlas 접속 with MongoDB Shell (MacOS)
+```bash
+brew install mongosh
+mongosh $CLUSTER_URL --apiVersion 1 --username $USERNAME
+```
+> [Connection String](https://www.mongodb.com/docs/manual/reference/connection-string/#std-label-find-connection-string) 참고
+
+- GUI는 `MongoDB Compass` 사용
+
+## MQL
+### [SQL Mapping Chart](https://www.mongodb.com/docs/manual/reference/sql-comparison/)
+### [CRUD](https://www.mongodb.com/docs/manual/crud/)
+### [Operator](https://www.mongodb.com/docs/manual/reference/operator/query/)
+### 예제
+```js
+db.employees.find();
+
+// 단건
+db.employees.insertOne({
+  name: 'noose',
+  age: 29,
+  dept: 'Database',
+  joinDate: ISODate('2024-01-01'),
+  salary: 1000,
+  bonus: null
+});
+
+// 여러건
+db.employees.insertMany([
+  {
+    name: 'noose',
+    age: 29,
+    dept: 'Database',
+    joinDate: ISODate('2024-01-01'),
+    salary: 1000,
+    bonus: null
+  },
+  {
+    name: 'noose2',
+    age: 29,
+    dept: 'Database',
+    joinDate: ISODate('1995-01-01'),
+    resignationDate: ISODate('2002-01-01'),
+    salary: 1000,
+    bonus: null
+  },
+  {
+    name: 'noose3',
+    age: 29,
+    dept: 'DevOps',
+    salary: 1000,
+    bonus: null,
+    isNagotiating: true
+  }
+]);
+
+// 수정
+db.employees.updateOne(
+  { name: "noose3" },
+  {
+    $set: {
+      salary: 100000000,
+      dept: "Database",
+      joinDate: ISODate('2023-01-01'),
+    },
+    $unset: {
+      isNagotiating: ""
+    }
+  }
+);
+
+db.employees.updateMany(
+  { resignationDate: { $exists: false } },
+  { $mul: { salary: Decimal128("1.1") } }
+);
+
+db.employees.deleteOne({ name: "noose"});
+db.employees.deleteMany({});
+db.employees.drop();
+```
