@@ -187,3 +187,9 @@ db.employees.deleteOne({ name: "noose"});
 db.employees.deleteMany({});
 db.employees.drop();
 ```
+
+### Aggreagation
+- Collection의 데이터를 변환하거나 분석하기 위해 사용하는 집계
+- Find 함수로 처리할 수 없는 SQL의 Group By와 Join 구문 같은 복잡한 데이터 분석
+- Pipeline 형태를 갖춘다
+  - match, group, sort stage로 나아간다.
