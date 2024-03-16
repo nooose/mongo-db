@@ -193,3 +193,54 @@ db.employees.drop();
 - Find 함수로 처리할 수 없는 SQL의 Group By와 Join 구문 같은 복잡한 데이터 분석
 - Pipeline 형태를 갖춘다
   - match, group, sort stage로 나아간다.
+
+```js
+db.orders.aggregate([
+  {
+    $match: {
+      size: "medium"
+    }
+  },
+  {
+    $group: {
+      _id: "name",
+      totalQuantity: {
+        $sum: "$quantity"
+      }
+    }
+  }
+])
+
+db.orders.aggregate([
+  {
+    $match: {
+      date: {
+        $gte: new ISODate("2020-01-30"),
+        $lt: new ISODate("2022-01-30")
+      }
+    },
+  },
+  {
+    $group: {
+      _id: {
+        $dateToString: {
+          format: "%Y-%m-%d", date: "$date"
+        },
+      },
+      totalOrderValue: {
+        $sum: {
+          $multiply: ["$price", "$quantity"]
+        }
+      },
+      averageOrderQuantity: {
+        $avg: "quantity"
+      }
+    }
+  },
+  {
+    $sort: {
+      totalOrderValue: -1
+    }
+  }
+])
+```
