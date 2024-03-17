@@ -244,3 +244,34 @@ db.orders.aggregate([
   }
 ])
 ```
+
+## 읽기와 쓰기 제어
+### Read Preference
+- `primary`: 무조건 `Primay`로 읽기 요청
+- `primaryPreferred`: 가능하면 `Primary`에서 읽고 없으면 `Secondary`로 요청
+- `secondary`: 무조건 `Secondary`로 읽기 요청
+- `secondaryPreferred`: 가능하면 `Secondary`에서 읽고 없으면 `Primary`로 요청
+  > secondary 는 지연된 데이터를 가져올 수 있다. <br>
+그러므로 허용 가능한 비즈니스인지 판단해야한다.
+- `nearest`: 평균 ping 시간을 기반으로 지연율이 가장 낮은 멤버로 요청
+### Read Concern
+일관된 읽기를 위한 옵션
+- local: 복제를 확인하지 않고 요청한 Member의 현재 데이터를 반환
+- available: local과 동일하지만, 고아 Document를 반환할 수 있다.
+- majority: Member 과반수가 들고 있는 동일한 데이터를 반환
+- linearizable: 쿼리 수행 전에 모든 Majority Write가 반영된 결과를 반환
+- snapshot: 특정 시점에 대한 결과를 반환 (Point-In-Time Query)
+
+### Write Concern
+Replica Set Member들 간의 동기화 정도를 제어하는 옵션
+
+- `w`: 복제할 replica 수
+  - `majority` 설정 시 과반수 이상을 자동으로 설정
+
+### Transaciton
+트랜잭션을 사용한다는 것을 정규화를 거쳐 여러 Document를 저장한다는 의미로 볼 수 있다.
+
+
+이러한 이유로 개인적으로 MongoDB에서의 트랜잭션 기능은 MongoDB의 취지에 맞지 않는다고 생각한다.
+
+결론적으로, 트랜잭션이 필요하다면 RDB를 사용하는 것이 더 나을 것으로 보인다.
